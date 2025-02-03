@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'id_m_departemen'
     ];
 
     /**
@@ -44,5 +45,9 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function departemen()
+    {
+        return $this->belongsTo(Department::class, 'id_m_departemen', 'id_m_departemen');
     }
 }
