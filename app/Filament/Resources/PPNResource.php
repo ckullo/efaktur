@@ -39,7 +39,16 @@ class PPNResource extends Resource
     {
         return $form
             ->schema([
-                //
+                TextInput::make('nilai_vat')
+                    ->required(),
+                Textarea::make('note'),
+                Select::make('status')
+                    ->options([
+                        't' => 'Active',
+                        'f' => 'Inactive',
+                    ])
+                    ->required(),
+
             ]);
     }
 
@@ -47,7 +56,15 @@ class PPNResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('id_m_vat')->label('No.'),
+                TextColumn::make('nilai_vat')->label('PPN(%)'),
+                TextColumn::make('note')->label('Note'),
+                TextColumn::make('status')
+                    ->label('Status')
+                    ->formatStateUsing(fn($state) => $state === 't' ? 'Active' : 'Inactive')
+                    ->sortable(),
+                TextColumn::make('userid_modified')->label('Modified By'),
+                TextColumn::make('date_modified')->label('Last Update'),
             ])
             ->filters([
                 //

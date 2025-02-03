@@ -10,10 +10,19 @@ class ManagePPNS extends ManageRecords
 {
     protected static string $resource = PPNResource::class;
 
+    public function getTitle(): string
+    {
+        return 'PPN';
+    }
+    public function getHeading(): string
+    {
+        return 'PPN';
+    }
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()->label('New PPN'),
         ];
     }
+
 }
