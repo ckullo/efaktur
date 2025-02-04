@@ -5,20 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Matcode extends Model
+class MatcodeFile extends Model
 {
     use HasFactory;
 
-    protected $table = 'm_matcode'; // Custom table name
-    protected $primaryKey = 'id_m_matcode'; // Primary key
+    protected $table = 'm_matcode_file'; // Custom table name
+    protected $primaryKey = 'id_m_matcode_file'; // Primary key
 
     public $timestamps = false; // Disable timestamps
 
     protected $fillable = [
-        'id_m_matcode_file',
-        'nama',
+        'nama_file',
         'status',
-        'description',
+        'jumlah',
+        'lokasi_file',
+        'ukuran',
+        'keterangan',
         'userid_created',
         'date_created',
         'userid_modified',
@@ -30,8 +32,9 @@ class Matcode extends Model
         'date_modified' => 'datetime',
     ];
 
-    public function matcodeFile()
+    public function matcodes()
     {
-        return $this->belongsTo(MatcodeFile::class, 'id_m_matcode_file', 'id_m_matcode_file');
+        return $this->hasMany(Matcode::class, 'id_m_matcode_file', 'id_m_matcode_file');
     }
+
 }

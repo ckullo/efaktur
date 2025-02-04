@@ -15,19 +15,14 @@ class Customer extends Model
 
     protected $fillable = [
         'nama_file',
-        'status',
         'jumlah',
         'lokasi_file',
         'ukuran',
-        'keterangan',
-        'userid_created',
-        'date_created',
-        'userid_modified',
-        'date_modified',
+        'ketarangan'
     ];
 
-    protected $casts = [
-        'date_created' => 'datetime',
-        'date_modified' => 'datetime',
-    ];
+    public function details()
+    {
+        return $this->hasMany(CustomerDetail::class, 'id_m_customer', 'id_m_customer');
+    }
 }

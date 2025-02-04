@@ -25,6 +25,9 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->sidebarCollapsibleOnDesktop()
+            ->brandName('eFaktur')
+            ->brandLogo(asset('images/logo.jpg'))
+            ->brandLogoHeight('4rem')
             ->id('admin')
             ->path('admin')
             ->login()
