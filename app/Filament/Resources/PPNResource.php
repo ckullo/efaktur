@@ -33,6 +33,8 @@ class PPNResource extends Resource
 
     protected static ?string $navigationGroup = 'Master';
 
+    protected static ?string $slug = 'ppn';
+
     public static ?int $navigationSort = 4;
 
     public static function form(Form $form): Form
