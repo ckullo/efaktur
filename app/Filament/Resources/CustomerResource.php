@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use illuminate\storage\Facades\Storage;
 use App\Models\Customer;
+use App\Models\CustomerDetail;
 use App\Filament\Resources\CustomerResource\Pages;
 use App\Filament\Resources\CustomerResource\RelationManagers;
 use App\Imports\CustomerImportManager;
@@ -55,7 +56,13 @@ class CustomerResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('id_m_customer')->label('No.'),
-                TextColumn::make('nama_file')->label('Nama File'),
+                TextColumn::make('nama_file')
+                    ->label('Nama File')
+                    ->sortable()
+                    ->searchable()
+                    ->action(fn($record) => static::showDetailsAction($record))
+                    ->color('primary')
+                    ->extraAttributes(['class' => 'cursor-pointer']),
                 TextColumn::make('jumlah')->label('Jumlah Record'),
                 TextColumn::make('keterangan')->label('Keterangan'),
                 TextColumn::make('userid_modified')->label('User'),
@@ -67,7 +74,7 @@ class CustomerResource extends Resource
             ->actions([
                 // Tables\Actions\EditAction::make(),
                 // Tables\Actions\DeleteAction::make(),
-                
+                static::showDetailsAction(),
             ])
             ->bulkActions([
                 // Tables\Actions\BulkActionGroup::make([
@@ -75,6 +82,20 @@ class CustomerResource extends Resource
             ]);
     }
 
+    protected static function showDetailsAction($record = null): Action
+    {
+        return Action::make('showDetails')
+            ->label('View Details')
+            ->icon('heroicon-o-eye')
+            ->modalHeading('Customer Details')
+            ->modalWidth('2xl')
+            ->modalSubmitActionLabel('Close')
+            ->modalContent(function () use ($record) {
+                return view('filament.modals.customer-details', [
+                    'customerDetails' => CustomerDetail::where('id_m_customer', $record->id_m_customer ?? null)->get(),
+                ]);
+            });
+    }
     public static function getPages(): array
     {
         return [

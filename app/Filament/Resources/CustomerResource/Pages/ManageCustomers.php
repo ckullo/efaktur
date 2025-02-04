@@ -34,7 +34,7 @@ class ManageCustomers extends ManageRecords
                     ->label('Upload Excel File')
                     ->storeFiles()
                     ->disk('local')
-                    ->directory('temp-uploads')
+                    ->directory('uploads/customer')
                     ->acceptedFileTypes(['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'])
                     ->required(),
                 Textarea::make('keterangan')
@@ -51,8 +51,8 @@ class ManageCustomers extends ManageRecords
                 }
 
                 // Retrieve the file from storage
-                // $storedFileName = basename($filePath);
-                $originalFileName =  $data['file'];
+                $storedFileName = basename($filePath);
+                // $originalFileName =  $data['file'];
                 $fileSize = Storage::disk('local')->size($data['file']);
                 $keterangan = $data['keterangan'];
 
@@ -62,7 +62,7 @@ class ManageCustomers extends ManageRecords
 
                 // Insert into `m_customer`
                 $customer = \App\Models\Customer::create([
-                    'nama_file' => $originalFileName,
+                    'nama_file' => $storedFileName,
                     'jumlah' => $rowCount,
                     'lokasi_file' => $filePath,
                     'ukuran' => $fileSize,
@@ -73,7 +73,7 @@ class ManageCustomers extends ManageRecords
                 Excel::import(new CustomerImport($customer->id_m_customer),$filePath);
                 
                 // Delete the uploaded file from storage
-                Storage::disk('local')->delete($data['file']);
+                // Storage::disk('local')->delete($data['file']);
 
                 \Filament\Notifications\Notification::make()
                     ->title('Import Successful')
