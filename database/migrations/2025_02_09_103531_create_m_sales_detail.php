@@ -19,12 +19,12 @@ return new class extends Migration
             $table->string('nama', 100)->nullable()->collation('latin1_swedish_ci');
             $table->string('material_number', 20)->nullable()->collation('latin1_swedish_ci');
             $table->string('currency', 5)->nullable()->collation('latin1_swedish_ci');
-            $table->decimal('unit_price', 10, 2)->nullable();
+            $table->decimal('unit_price', 10, 0)->nullable();
             $table->string('bill_type', 20)->nullable()->collation('latin1_swedish_ci');
-            $table->decimal('qty_roll', 10, 2)->nullable();
-            $table->decimal('qt_kg', 10, 2)->nullable();
+            $table->decimal('qty_roll', 10, 0)->nullable();
+            $table->decimal('qty_kg', 10, 2)->nullable();
             $table->string('uom', 15)->nullable()->collation('latin1_swedish_ci');
-            $table->decimal('total_amount', 12, 2)->nullable();
+            $table->decimal('total_amount', 12, 0)->nullable();
 
             $table->unique('id_m_sales_detail', 'idx_id_m_sales_detail');
 

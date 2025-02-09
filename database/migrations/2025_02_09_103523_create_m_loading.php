@@ -15,7 +15,7 @@ return new class extends Migration
             $table->increments('id_m_loading'); // Auto-increment primary key
             $table->integer('no_')->nullable();
             $table->string('nama_file_faktur', 100)->nullable()->collation('latin1_swedish_ci');
-            $table->string('nama)file_sales', 100)->nullable()->collation('latin1_swedish_ci');
+            $table->string('nama_file_sales', 100)->nullable()->collation('latin1_swedish_ci');
             $table->string('nama_file_csv', 100)->nullable()->collation('latin1_swedish_ci');
             $table->string('periode',6)->collation('latin1_swedish_ci');
             $table->string('status', 1)->default('t')->collation('latin1_swedish_ci');
