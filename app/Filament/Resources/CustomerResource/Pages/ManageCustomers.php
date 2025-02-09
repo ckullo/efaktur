@@ -24,18 +24,19 @@ class ManageCustomers extends ManageRecords
     {
         return [
             Action::make('import')
-            ->label('Import Excel')
+            ->label('Import Customer')
             ->icon('heroicon-o-arrow-up-on-square')
-            ->modalHeading('Upload Excel File')
+            ->modalHeading('Upload Customer Data')
             ->modalDescription('Select an Excel file to import customer data.')
-            ->modalButton('Import')
+            ->modalSubmitActionLabel('Import Customer')
             ->form([
                 FileUpload::make('file')
-                    ->label('Upload Excel File')
+                    ->label('Upload File')
                     ->storeFiles()
                     ->disk('local')
                     ->directory('uploads/customer')
                     ->acceptedFileTypes(['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'])
+                    ->preserveFilenames()
                     ->required(),
                 Textarea::make('keterangan')
                     ->label('Keterangan')
@@ -71,7 +72,7 @@ class ManageCustomers extends ManageRecords
 
                 // Process Excel file and insert into `m_customer_detail`
                 Excel::import(new CustomerImport($customer->id_m_customer),$filePath);
-                
+
                 // Delete the uploaded file from storage
                 // Storage::disk('local')->delete($data['file']);
 

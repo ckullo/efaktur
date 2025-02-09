@@ -58,12 +58,10 @@ class CustomerResource extends Resource
                 TextColumn::make('id_m_customer')->label('No.'),
                 TextColumn::make('nama_file')
                     ->label('Nama File')
-                    ->sortable()
-                    ->searchable()
-                    ->action(fn($record) => static::showDetailsAction($record))
-                    ->color('primary')
-                    ->extraAttributes(['class' => 'cursor-pointer']),
-                TextColumn::make('jumlah')->label('Jumlah Record'),
+                    ->sortable(),
+                TextColumn::make('jumlah')
+                    ->label('Jumlah Record')
+                    ->sortable(),
                 TextColumn::make('keterangan')->label('Keterangan'),
                 TextColumn::make('userid_modified')->label('User'),
                 TextColumn::make('date_modified')->label('Waktu')
@@ -75,6 +73,12 @@ class CustomerResource extends Resource
                 // Tables\Actions\EditAction::make(),
                 // Tables\Actions\DeleteAction::make(),
                 static::showDetailsAction(),
+                Action::make('download')
+                ->label('')
+                ->icon('heroicon-o-document-arrow-down')
+                // ->color('success')
+                ->url(fn ($record) => route('download.customerFile', ['filePath' => $record->lokasi_file]))
+                ->openUrlInNewTab(), // ✅ Opens in new tab
             ])
             ->bulkActions([
                 // Tables\Actions\BulkActionGroup::make([
