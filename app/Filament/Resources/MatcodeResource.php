@@ -76,16 +76,25 @@ class MatcodeResource extends Resource
     protected static function showDetailsAction($record = null): Action
     {
         return Action::make('showDetails')
-            ->label('View Details')
+            ->label('')
             ->icon('heroicon-o-eye')
-            ->modalHeading('Customer Details')
-            ->modalWidth('2xl')
+            // ->modalHeading('Material Code')
+            ->modalWidth('5xl')
             ->modalSubmitActionLabel('Close')
-            ->modalContent(function () use ($record) {
-                return view('filament.modals.matcode', [
-                    'matcode' => Matcode::where('id_m_matcode_file', $record->id_m_matcode_file ?? null)->get(),
-                ]);
-            });
+            ->modalContent(fn($record) => static::getModalContent($record));
+    }
+
+    protected static function getModalContent($record)
+    {
+        // ✅ Ensure `$record` exists before querying
+        if (!$record) {
+            return '<p class="text-gray-500">No details available.</p>';
+        }
+
+        return view('filament.modals.matcode', [
+            'matcodeFileId' => $record->id_m_matcode_file,
+        ]);
+
     }
 
     public static function getPages(): array
@@ -94,6 +103,4 @@ class MatcodeResource extends Resource
             'index' => Pages\ManageMatcodes::route('/'),
         ];
     }
-
-    
 }
