@@ -16,7 +16,8 @@ return new class extends Migration
             $table->integer('no_')->nullable();
             $table->string('nama_file_faktur', 100)->nullable()->collation('latin1_swedish_ci');
             $table->string('nama_file_sales', 100)->nullable()->collation('latin1_swedish_ci');
-            $table->string('nama_file_csv', 100)->nullable()->collation('latin1_swedish_ci');
+            $table->string('nama_file_xml', 100)->nullable()->collation('latin1_swedish_ci');
+            $table->string('nama_file_xls', 100)->nullable()->collation('latin1_swedish_ci');
             $table->string('periode',6)->collation('latin1_swedish_ci');
             $table->string('status', 1)->default('t')->collation('latin1_swedish_ci');
             $table->integer('jumlah')->nullable();

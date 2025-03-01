@@ -29,8 +29,8 @@ class SalesDetail extends Model
         'total_amount',
     ];
 
-    public function loading()
-    {
-        return $this->belongsTo(Loading::class, 'id_m_loading', 'id_m_loading');
-    }
+    // public function loading()
+    // {
+    //     return $this->belongsTo(Loading::class, 'id_m_loading', 'id_m_loading');
+    // }
 }

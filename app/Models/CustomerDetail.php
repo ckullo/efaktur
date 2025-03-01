@@ -13,13 +13,20 @@ class CustomerDetail extends Model
     protected $primaryKey = 'id_m_customer_detail'; // Set primary key
 
     public $timestamps = false;
-    
+
     protected $fillable = [
         'id_m_customer',
         'kode',
         'nama',
         'alamat',
         'kota',
+        'kode_pos',
+        'kode_negara',
+        'npwp',
+        'id_tku',
+        'nik',
+        'id_type',
+        'status'
     ];
 
     public function customer()

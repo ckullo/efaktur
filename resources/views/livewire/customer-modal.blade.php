@@ -4,7 +4,7 @@
     @if ($customer)
         <div class="bg-gray-100 p-3 rounded-md mb-4">
             <p><strong>File Name:</strong> {{ $customer->nama_file }}</p>
-            <p><strong>File Location:</strong> {{ $customer->lokasi_file }}</p>
+            <p><strong>File Location: </strong> \uploads\customer\{{ $customer->nama_file }}</p>
         </div>
     @endif
 
@@ -18,6 +18,7 @@
                 <th class="border p-2">Nama</th>
                 <th class="border p-2">Alamat</th>
                 <th class="border p-2">Kota</th>
+                <th class="border p-2">Kode Pos</th>
             </tr>
         </thead>
         <tbody>
@@ -27,6 +28,7 @@
                     <td class="border p-2">{{ $detail->nama }}</td>
                     <td class="border p-2">{{ $detail->alamat }}</td>
                     <td class="border p-2">{{ $detail->kota }}</td>
+                    <td class="border p-2">{{ $detail->kode_pos }}</td>
                 </tr>
             @endforeach
         </tbody>

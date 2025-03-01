@@ -21,6 +21,12 @@ class FakturMasukkanResource extends Resource
     protected static ?string $navigationLabel = 'Faktur Masukkan';
     protected static ?string $navigationGroup = 'Transaksi';
     protected static ?string $slug = 'faktur-masukkan';
+    public static ?int $navigationSort = 6;
+    public static function canAccess(): bool
+    {
+        return false;
+    }
+
     public static function form(Form $form): Form
     {
         return $form

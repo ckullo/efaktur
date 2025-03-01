@@ -14,7 +14,6 @@ use Filament\Forms\Components\FileUpload;
 
 use Illuminate\Support\Facades\Storage;
 
-use Livewire\TemporaryUploadedFile;
 
 class ManageCustomers extends ManageRecords
 {
@@ -72,9 +71,6 @@ class ManageCustomers extends ManageRecords
 
                 // Process Excel file and insert into `m_customer_detail`
                 Excel::import(new CustomerImport($customer->id_m_customer),$filePath);
-
-                // Delete the uploaded file from storage
-                // Storage::disk('local')->delete($data['file']);
 
                 \Filament\Notifications\Notification::make()
                     ->title('Import Successful')

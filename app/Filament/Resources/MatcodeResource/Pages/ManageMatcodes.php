@@ -37,6 +37,7 @@ class ManageMatcodes extends ManageRecords
                         ->disk('local')
                         ->directory('uploads/matcode')
                         ->acceptedFileTypes(['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'])
+                        ->preserveFilenames()
                         ->required(),
                     Textarea::make('keterangan')
                         ->label('Keterangan')
@@ -50,12 +51,12 @@ class ManageMatcodes extends ManageRecords
                     if (!isset($data['file']) || !Storage::disk('local')->exists($data['file'])) {
                         throw new \Exception('Invalid file upload. Please try again.');
                     }
-                    
+
                     // Retrieve the file from storage
                     $storedFileName = basename($filePath);
                     $fileSize = Storage::disk('local')->size($data['file']);
                     $keterangan = $data['keterangan'];
-                        
+
                     // Count rows from Excel file
                     $excelData = Excel::toArray([], $filePath);
                     $rowCount = count($excelData[0]) - 1; // Exclude header row

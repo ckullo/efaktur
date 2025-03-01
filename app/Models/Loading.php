@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Loading extends Model
 {
@@ -19,7 +20,8 @@ class Loading extends Model
         'no_',
         'nama_file_faktur',
         'nama_file_sales',
-        'nama_file_csv',
+        'nama_file_xml',
+        'nama_file_xls',
         'periode',
         'status',
         'jumlah',
@@ -40,8 +42,5 @@ class Loading extends Model
         return $lastRecord ? $lastRecord->no_ + 1 : 1;
     }
 
-    public function salesDetails()
-    {
-        return $this->hasMany(SalesDetail::class, 'id_m_loading', 'id_m_loading');
-    }
+
 }

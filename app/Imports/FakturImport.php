@@ -5,6 +5,7 @@ namespace App\Imports;
 use App\Models\FakturDetail;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class FakturImport implements ToCollection
 {
@@ -34,12 +35,22 @@ class FakturImport implements ToCollection
                 'id_m_loading' => $this->id_m_loading,
                 'faktur_no'=> $row[0],
                 'bill_no'=> $row[1],
-                'bill_date'=> $row[2],
+                'bill_date'=> $this->convertExcelDateToString($row[2]),
                 'payer'=> $row[3],
                 'payer_name'=> $row[4],
                 'npwp'=> $row[5],
                 'status_m_faktur'=> $row[6],
             ]);
         }
+    }
+
+    private function convertExcelDateToString($excelDate)
+    {
+        if (is_numeric($excelDate)) {
+            // ✅ Converts numeric Excel dates
+            return Date::excelToDateTimeObject($excelDate)->format('d/m/Y');
+        }
+        // ✅ Converts text dates
+        return date('d/m/Y', strtotime($excelDate));
     }
 }
