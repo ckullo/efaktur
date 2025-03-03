@@ -125,6 +125,7 @@ class FakturSalesResource extends Resource
                                 '04' AS kode_transaksi,
                                 '' AS keterangan_tambahan,
                                 '' AS dokumen_pendukung,
+                                '' AS period_dok_pendukung,
                                 fd.bill_no AS referensi,
                                 '' AS cap_fasilitas,
                                 '0030794754415000000000' AS id_tku_penjual,

@@ -152,6 +152,7 @@ class ManageFakturSales extends ManageRecords
                 '04' AS kode_transaksi,
                 '' AS keterangan_tambahan,
                 '' AS dokumen_pendukung,
+                '' AS period_dok_pendukung,
                 fd.bill_no AS referensi,
                 '' AS cap_fasilitas,
                 '0030794754415000000000' AS id_tku_penjual,
@@ -210,9 +211,9 @@ class ManageFakturSales extends ManageRecords
             $invoice->addChild('BuyerTin', $header->npwp);
             $invoice->addChild('BuyerDocument', $header->id_type);
             $invoice->addChild('BuyerCountry', $header->kode_negara);
-            $invoice->addChild('BuyerDocumentNumber',$header->nik);
+            $invoice->addChild('BuyerDocumentNumber', $header->nik);
             $invoice->addChild('BuyerName', $header->nama);
-            $invoice->addChild('BuyerAdress', $header->alamat);
+            $invoice->addChild('BuyerAdress', htmlspecialchars($header->alamat, ENT_XML1, 'UTF-8'));
             $invoice->addChild('BuyerEmail', $header->email);
             $invoice->addChild('BuyerIDTKU', $header->id_tku_payer);
 
@@ -251,5 +252,4 @@ class ManageFakturSales extends ManageRecords
         //     'Content-Type' => 'application/xml',
         // ])->send();
     }
-
 }
