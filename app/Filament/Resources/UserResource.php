@@ -9,6 +9,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Password;
+
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\DeleteAction;
@@ -37,6 +38,12 @@ class UserResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name'),
+                TextInput::make('email')
+                    ->email()
+                    ->required(),
+                TextInput::make('password')
+                    ->password()
+                    ->required(),
                 Textarea::make('keterangan'),
                 Select::make('id_m_departemen')
                     ->label('Department')
@@ -49,7 +56,7 @@ class UserResource extends Resource
                         't' => 'Active',
                         'n' => 'Inactive',
                     ])
-                    ->default('active')
+                    ->default('t')
                     ->required(),
             ]);
     }
@@ -66,18 +73,22 @@ class UserResource extends Resource
                 TextColumn::make('email')
                     ->sortable(),
                 TextColumn::make('departemen.nama_departemen')
-                ->sortable(query: function ($query, $direction) {
-                    return $query->orderBy(
-                        Department::select('nama_departemen')
-                            ->whereColumn('m_departemen.id_m_departemen', 'users.id_m_departemen'),
-                        $direction
-                    );
-                })
+                    ->sortable(query: function ($query, $direction) {
+                        return $query->orderBy(
+                            Department::select('nama_departemen')
+                                ->whereColumn('m_departemen.id_m_departemen', 'users.id_m_departemen'),
+                            $direction
+                        );
+                    })
                     ->label('Department'),
                 TextColumn::make('keterangan')
                     ->label('Notes'),
                 TextColumn::make('status')
-                    ->sortable(),
+                    ->sortable()
+                    ->label('Status')
+                    ->formatStateUsing(function ($state) {
+                        return $state == 't' ? 'Active' : 'Inactive';
+                    }),
                 TextColumn::make('updated_by')
                     ->sortable()
                     ->label('Updated by')

@@ -49,11 +49,11 @@ class CustomerResource extends Resource
                 // show details
                 static::showDetailsAction(),
                 // download file
-                Action::make('download')
-                    ->label('')
-                    ->icon('heroicon-o-document-arrow-down')
-                    ->url(fn ($record) => route('download.customerFile', ['filePath' => $record->lokasi_file]))
-                    ->openUrlInNewTab(),
+                // Action::make('download')
+                //     ->label('')
+                //     ->icon('heroicon-o-document-arrow-down')
+                //     ->url(fn ($record) => route('download.customerFile', ['filePath' => $record->lokasi_file]))
+                //     ->openUrlInNewTab(),
             ])
             ->bulkActions([
 
