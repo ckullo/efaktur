@@ -156,7 +156,7 @@ class ManageFakturSales extends ManageRecords
                 fd.bill_no AS referensi,
                 '' AS cap_fasilitas,
                 '0030794754415000000000' AS id_tku_penjual,
-                IF(cd.id_type <> 'TIN', '0000000000000000', cd.npwp) AS npwp,
+                IF(cd.id_type <> 'TIN', '0000000000000000', cd.nik) AS npwp,
                 cd.id_type,
                 cd.kode_negara,
                 IF(cd.id_type <> 'TIN', cd.nik, '-') AS nik ,
@@ -172,34 +172,34 @@ class ManageFakturSales extends ManageRecords
         // ✅ 2. Fetch Detail Data
         $detailData = DB::select("
             SELECT bill_no AS referensi,
-                'A' AS Brg,
-                '392100' AS KodeBrg,
-                mc.description as nama,
-                'UM.0003' AS satuan_ukur,
-                sd.unit_price,
-                sd.qty_kg,
-                0 AS diskon,
-                sd.total_amount AS dpp,
-                ROUND((total_amount * 11/mv.nilai_vat),2) AS dpp_nilai_lain,
-                mv.nilai_vat AS tarif_ppn,
-		        ROUND((sd.total_amount * 11/mv.nilai_vat) * (mv.nilai_vat/100),2) AS ppn,
-                0 AS tarif_ppnbm,
-                0 AS ppnbm
-            FROM m_sales_detail AS sd
-            INNER JOIN m_matcode mc ON sd.material_number = mc.nama, m_vat mv
-            WHERE sd.bill_no in (SELECT bill_no FROM m_faktur_detail WHERE id_m_loading = ?)
+                    'A' AS Brg,
+                    '392100' AS KodeBrg,
+                    mc.`description` AS nama,
+                    'UM.0003' AS satuan_ukur,
+                    sd.unit_price,
+                    SUM(sd.qty_kg) AS qty_kg,
+                    0 AS diskon,
+                    SUM(sd.total_amount) AS dpp,
+                    SUM(ROUND((total_amount * 11/mv.nilai_vat),2)) AS dpp_nilai_lain,
+                    mv.nilai_vat AS tarif_ppn,
+                    SUM(ROUND((sd.total_amount * 11/mv.nilai_vat) * (mv.nilai_vat/100),2)) AS ppn,
+                    0 AS tarif_ppnbm,
+                    0 AS ppnbm
+            FROM m_sales_detail AS sd INNER JOIN m_matcode mc ON sd.material_number = mc.nama, m_vat mv
+            WHERE sd.bill_no in (SELECT bill_no FROM m_faktur_detail)
+                    AND id_m_loading = ?
+            GROUP BY referensi, brg, kodebrg, nama, satuan_ukur, unit_price, tarif_ppn, tarif_ppnbm, ppnbm
+            ORDER BY referensi, nama
         ", [$id_m_loading]);
 
         // ✅ 3. Create XML Structure
-        $xml = new SimpleXMLElement('<TaxInvoiceBulk/>');
-        $xml->addAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
-        $xml->addAttribute('xsi:noNamespaceSchemaLocation', 'TaxInvoice.xsd');
+        $xml = new SimpleXMLElement('<TaxInvoiceBulk xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>');
         $xml->addChild('TIN', '0030794754415000');
         $listOfInvoices = $xml->addChild('ListOfTaxInvoice');
 
         foreach ($headerData as $header) {
             $invoice = $listOfInvoices->addChild('TaxInvoice');
-            $invoice->addChild('TaxInvoiceDate', $header->tanggal_faktur);
+            $invoice->addChild('TaxInvoiceDate', Carbon::parse($header->tanggal_faktur)->format('Y-m-d'));
             $invoice->addChild('TaxInvoiceOpt', $header->jenis_faktur);
             $invoice->addChild('TrxCode', $header->kode_transaksi);
             $invoice->addChild('AddInfo', $header->keterangan_tambahan);

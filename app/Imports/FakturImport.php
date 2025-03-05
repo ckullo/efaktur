@@ -48,9 +48,17 @@ class FakturImport implements ToCollection
     {
         if (is_numeric($excelDate)) {
             // ✅ Converts numeric Excel dates
-            return Date::excelToDateTimeObject($excelDate)->format('d/m/Y');
+            return Date::excelToDateTimeObject($excelDate)->format('Y-m-d');
         }
-        // ✅ Converts text dates
-        return date('d/m/Y', strtotime($excelDate));
+
+        // If the date is already in `d/m/Y` or similar format, convert it
+        $dateTime = \DateTime::createFromFormat('Y/m/d', $excelDate);
+        if ($dateTime) {
+            return $dateTime->format('Y-m-d');
+        }
+
+        // If the format is unknown, return as is (fallback)
+        return (string) $excelDate;
+
     }
 }

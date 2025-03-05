@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\CustomerDetail;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 
@@ -17,23 +18,51 @@ class CustomerImport implements ToCollection
 
     public function collection(Collection $rows)
     {
-        // Skip the first row (header)
+
+        //Skip the first row (header)
         $rows->shift();
 
         foreach ($rows as $row) {
-            CustomerDetail::create([
-                'id_m_customer' => $this->customerId,
-                'kode' => $row[0], // Cust. Number
-                'nama' => $row[1], // Name
-                'alamat' => $row[2], // Address
-                'kota' => $row[3], // City
-                'kode_pos' => $row[4], // Postal Code
-                'npwp' => $row[5], // NPWP
-                'id_tku' => $row[6], // TKU
-                'nik' => $row[7], // NIK
-                'id_type' => $row[8], // Type
-                'kode_negara' => $row[9], // Country Code
-            ]);
+            $kode = $row[0];
+
+            try{
+                CustomerDetail::updateOrCreate(
+                    ['kode' => $kode],
+                    [
+                        'nama' => $row[1],
+                        'alamat' => $row[2],
+                        'kota' => $row[3],
+                        'kode_pos' => $row[4],
+                        'npwp' => $row[5],
+                        'id_tku' => $row[6],
+                        'nik' => $row[7],
+                        'id_type' => $row[8],
+                        'kode_negara' => $row[9],
+                    ]
+                );
+            } Catch(QueryException $e){
+                if($e->getCode() == '23000'){
+                    $existingCustomer = CustomerDetail::where('kode', $kode)->first();
+
+                    if($existingCustomer){
+                        $existingCustomer->update([
+                            'id_m_customer' => $this->customerId,
+                            'nama' => $row[1],
+                            'alamat' => $row[2],
+                            'kota' => $row[3],
+                            'kode_pos' => $row[4],
+                            'npwp' => $row[5],
+                            'id_tku' => $row[6],
+                            'nik' => $row[7],
+                            'id_type' => $row[8],
+                            'kode_negara' => $row[9],
+                        ]);
+                    }
+                } else {
+                    throw $e;
+                }
+            }
+
         }
     }
 }

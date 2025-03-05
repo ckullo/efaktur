@@ -28,11 +28,16 @@ return new class extends Migration
         Schema::create('m_customer_detail', function (Blueprint $table) {
             $table->id('id_m_customer_detail'); // Primary key
             $table->unsignedInteger('id_m_customer')->nullable();
-            $table->string('kode', 15)->nullable();
+            $table->string('kode', 15);
             $table->string('nama', 100)->nullable();
             $table->string('alamat', 200)->nullable();
             $table->string('kota', 200)->nullable();
             $table->string('kode_pos', 20)->nullable();
+            $table->string('kode_negara', 3)->default('IDN');
+            $table->string('npwp', 16)->default('0000000000000000');
+            $table->string('id_tku', 22)->default('0000000000000000000000');
+            $table->string('nik', 16)->default('0000000000000000');
+            $table->string('id_type', 12)->default('TIN');
             $table->char('status', 1)->default('t');
 
             // Unique indexes
